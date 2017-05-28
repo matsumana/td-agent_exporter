@@ -9,6 +9,7 @@
 - td_agent_cpu_time
 - td_agent_resident_memory_usage
 - td_agent_virtual_memory_usage
+- td_agent_up
 
 # Command Line Options
 
