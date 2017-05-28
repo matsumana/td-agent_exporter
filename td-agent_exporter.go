@@ -39,9 +39,7 @@ type Exporter struct {
 	cpuTime        *prometheus.CounterVec
 	virtualMemory  *prometheus.GaugeVec
 	residentMemory *prometheus.GaugeVec
-
-	// TODO up metrics
-	up *prometheus.GaugeVec
+	tdAgentUp      prometheus.Gauge
 }
 
 func NewExporter() *Exporter {
@@ -75,6 +73,11 @@ func NewExporter() *Exporter {
 			},
 			[]string{"id"},
 		),
+		tdAgentUp: prometheus.NewGauge(prometheus.GaugeOpts{
+			Namespace: namespace,
+			Name:      "up",
+			Help:      "the td-agent processes",
+		}),
 	}
 }
 
@@ -83,45 +86,52 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	e.cpuTime.Describe(ch)
 	e.virtualMemory.Describe(ch)
 	e.residentMemory.Describe(ch)
+	e.tdAgentUp.Describe(ch)
 }
 
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	// To protect metrics from concurrent collects.
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
-	if err := e.collect(ch); err != nil {
-		log.Infof("Error scraping td-agent: %s", err)
-		e.scrapeFailures.Inc()
-		e.scrapeFailures.Collect(ch)
-	}
+	e.collect(ch)
 }
 
-func (e *Exporter) collect(ch chan<- prometheus.Metric) error {
+func (e *Exporter) collect(ch chan<- prometheus.Metric) {
+	e.tdAgentUp.Set(0)
+
 	ids, err := e.resolveTdAgentId()
 	if err != nil {
-		return err
+		e.scrapeFailures.Inc()
+		e.scrapeFailures.Collect(ch)
+		return
 	}
 
 	log.Debugf("td-agent ids = %v", ids)
 
+	processes := 0
 	for id := range ids {
 		log.Debugf("td-agent id = %s", id)
 
 		procStat, err := e.getProcStat(id)
 		if err != nil {
-			return err
+			e.scrapeFailures.Inc()
+			e.scrapeFailures.Collect(ch)
+			continue
 		}
 
 		e.cpuTime.WithLabelValues(id).Add(procStat.CPUTime())
 		e.virtualMemory.WithLabelValues(id).Set(float64(procStat.VirtualMemory()))
 		e.residentMemory.WithLabelValues(id).Set(float64(procStat.ResidentMemory()))
+
+		processes++
 	}
+
+	e.tdAgentUp.Set(float64(processes))
 
 	e.cpuTime.Collect(ch)
 	e.virtualMemory.Collect(ch)
 	e.residentMemory.Collect(ch)
-
-	return nil
+	e.tdAgentUp.Collect(ch)
 }
 
 func (e *Exporter) resolveTdAgentId() (map[string]struct{}, error) {
