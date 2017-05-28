@@ -14,10 +14,14 @@
 
 Name     | Description | Default | note
 ---------|-------------|----|----
--web.listen-address | Address on which to expose metrics and web interface | 9256 |
--web.telemetry-path | Path under which to expose metrics | /metrics |
--fluentd.process_name_prefix | fluentd's process_name prefix | | [Fluentd official documentation](http://docs.fluentd.org/v0.12/articles/config-file#processname)
--log.level | Log level | info |
+web.listen-address | Address on which to expose metrics and web interface | 9256 |
+web.telemetry-path | Path under which to expose metrics | /metrics |
+fluentd.process_name_prefix | fluentd's process_name prefix | | [Fluentd official documentation](http://docs.fluentd.org/v0.12/articles/config-file#processname)
+log.level | Log level | info |
+
+e.g.
+
+    /path/to/td-agent_exporter -web.listen-address=19256 -web.telemetry-path=/metrics -fluentd.process_name_prefix=foo -log.level=debug
 
 # How to build
 
