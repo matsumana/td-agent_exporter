@@ -12,4 +12,5 @@ dependencies:
 
 test:
   override:
-    - make test-with-circleci
+    - make unittest-with-circleci
+    - make e2etest-with-circleci
