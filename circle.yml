@@ -8,8 +8,8 @@ machine:
 
 dependencies:
   override:
-    - make build-with-docker-circleci
+    - make build-with-circleci
 
 test:
   override:
-    - go test
+    - make test-with-circleci
