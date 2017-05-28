@@ -21,7 +21,7 @@ log.level | Log level | info |
 
 e.g.
 
-    /path/to/td-agent_exporter -web.listen-address=19256 -web.telemetry-path=/metrics -fluentd.process_name_prefix=foo -log.level=debug
+    /path/to/td-agent_exporter -fluentd.process_name_prefix=foo
 
 # How to build
 
