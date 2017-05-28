@@ -40,8 +40,7 @@ unittest:
 .PHONY : e2etest
 e2etest:
 	make e2etest_setup
-	sleep 3
-	go test -run E2E
+	GOROOT=/usr/local/go GOPATH=/go /usr/local/go/bin/go test -run E2E
 
 .PHONY : e2etest_setup
 e2etest_setup:
@@ -58,12 +57,10 @@ e2etest_setup:
 	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug &
 	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug -web.listen-address=19256 -fluentd.process_name_prefix=foo &
 
+	# Wait for td-agent_exporter to start up
+	sleep 3
+
 	# golang
 	yum install -y git
 	curl -L https://storage.googleapis.com/golang/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz > /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz
 	tar xvf /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz -C /usr/local
-	export PATH=/usr/local/go/bin:$PATH
-	export GOROOT=/usr/local/go
-	export GOPATH=/go
-	export PATH=$GOPATH/bin:$PATH
-	go get -u github.com/golang/dep/cmd/dep
