@@ -2,6 +2,7 @@ VERSION=$(patsubst "%",%,$(lastword $(shell grep "version\s*=\s" version.go)))
 BIN_DIR=bin
 BUILD_GOLANG_VERSION=1.8.3
 CENTOS_VERSION=7
+GITHUB_USERNAME=matsumana
 
 .PHONY : build-with-docker
 build-with-docker:
@@ -64,3 +65,9 @@ e2etest_setup:
 	yum install -y git
 	curl -L https://storage.googleapis.com/golang/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz > /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz
 	tar xvf /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz -C /usr/local
+
+check-github-token:
+	if [ ! -f "./github_token" ]; then echo 'file github_token is required'; exit 1 ; fi
+
+release: build-with-docker check-github-token
+	ghr -u $(GITHUB_USERNAME) -t $(shell cat github_token) --draft --replace $(VERSION) $(BIN_DIR)
