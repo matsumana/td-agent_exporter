@@ -18,7 +18,7 @@ import (
 
 var (
 	// command line parameters
-	listenAddress     = flag.String("web.listen-address", ":9256", "Address on which to expose metrics and web interface.")
+	listenAddress     = flag.String("web.listen-address", "9256", "Address on which to expose metrics and web interface.")
 	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 
@@ -308,5 +308,5 @@ func main() {
 		</html>`))
 	})
 
-	log.Fatal(http.ListenAndServe(*listenAddress, nil))
+	log.Fatal(http.ListenAndServe(":"+*listenAddress, nil))
 }
