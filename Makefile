@@ -6,6 +6,10 @@ BUILD_GOLANG_VERSION=1.8.3
 build-with-docker:
 	docker run --rm -v "$(PWD)":/go/src/github.com/matsumana/td-agent_exporter -w /go/src/github.com/matsumana/td-agent_exporter golang:$(BUILD_GOLANG_VERSION) bash -c 'make build-all'
 
+.PHONY : build-with-docker-circleci
+build-with-docker-circleci:
+	docker run -v "$(PWD)":/go/src/github.com/matsumana/td-agent_exporter -w /go/src/github.com/matsumana/td-agent_exporter golang:$(BUILD_GOLANG_VERSION) bash -c 'make build-all'
+
 .PHONY : build-all
 build-all: build-linux
 
