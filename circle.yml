@@ -1,4 +1,7 @@
+dependencies:
+  override:
+    - make build-linux
+
 test:
   override:
     - go test
-    - make build-linux
