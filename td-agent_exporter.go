@@ -22,7 +22,7 @@ var (
 	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 
-	processNameRegex = regexp.MustCompile(`\s/usr/sbin/td-agent\s*`)
+	processNameRegex       = regexp.MustCompile(`\s/usr/sbin/td-agent\s*`)
 	tdAgentPathRegex       = regexp.MustCompile("\\s" + strings.Replace(tdAgentLaunchCommand, " ", "\\s", -1) + "(.+)?\\s*")
 	configFileNameRegex    = regexp.MustCompile(`\s(-c|--config)\s.*/(.+)\.conf\s*`)
 	processNamePrefixRegex = regexp.MustCompile(`\sworker:(.+)?\s*`)
