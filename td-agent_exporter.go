@@ -22,14 +22,16 @@ var (
 	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 
-	processNameRegex       = regexp.MustCompile(`\s/usr/sbin/td-agent\s*`)
+	processNameRegex = regexp.MustCompile(`\s/usr/sbin/td-agent\s*`)
+	tdAgentPathRegex       = regexp.MustCompile("\\s" + strings.Replace(tdAgentLaunchCommand, " ", "\\s", -1) + "(.+)?\\s*")
 	configFileNameRegex    = regexp.MustCompile(`\s(-c|--config)\s.*/(.+)\.conf\s*`)
 	processNamePrefixRegex = regexp.MustCompile(`\sworker:(.+)?\s*`)
 )
 
 const (
 	// Can't use '-' for the metric name
-	namespace = "td_agent"
+	namespace            = "td_agent"
+	tdAgentLaunchCommand = "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent "
 )
 
 type Exporter struct {
@@ -109,10 +111,10 @@ func (e *Exporter) collect(ch chan<- prometheus.Metric) {
 	log.Debugf("td-agent ids = %v", ids)
 
 	processes := 0
-	for id := range ids {
+	for id, command := range ids {
 		log.Debugf("td-agent id = %s", id)
 
-		procStat, err := e.getProcStat(id)
+		procStat, err := e.getProcStat(id, command)
 		if err != nil {
 			e.scrapeFailures.Inc()
 			e.scrapeFailures.Collect(ch)
@@ -134,7 +136,7 @@ func (e *Exporter) collect(ch chan<- prometheus.Metric) {
 	e.tdAgentUp.Collect(ch)
 }
 
-func (e *Exporter) resolveTdAgentId() (map[string]struct{}, error) {
+func (e *Exporter) resolveTdAgentId() (map[string]string, error) {
 	lines, err := e.execPsCommand()
 	if err != nil {
 		return nil, err
@@ -143,7 +145,7 @@ func (e *Exporter) resolveTdAgentId() (map[string]struct{}, error) {
 
 	log.Debugf("filtered = %s", filtered)
 
-	var ids map[string]struct{}
+	var ids map[string]string
 	if *processNamePrefix == "" {
 		ids = e.resolveTdAgentIdWithConfigFileName(filtered)
 	} else {
@@ -186,52 +188,69 @@ func (e *Exporter) filter(lines []string) []string {
 	return filtered
 }
 
-func (e *Exporter) resolveTdAgentIdWithConfigFileName(lines []string) map[string]struct{} {
-	ids := make(map[string]struct{})
+func (e *Exporter) resolveTdAgentIdWithConfigFileName(lines []string) map[string]string {
+	ids := make(map[string]string)
 	for _, line := range lines {
 		log.Debugf("resolveTdAgentIdWithConfigFileName line = %s", line)
 
-		groups := configFileNameRegex.FindStringSubmatch(line)
+		groupsKey := configFileNameRegex.FindStringSubmatch(line)
 		var key string
-		if len(groups) == 0 {
+		if len(groupsKey) == 0 {
+			// doesn't use config file
 			key = "default"
 		} else {
-			key = groups[2]
+			key = groupsKey[2]
+		}
+
+		var value string
+		groupsValue := tdAgentPathRegex.FindStringSubmatch(line)
+		if len(groupsValue) > 0 {
+			value = tdAgentLaunchCommand + groupsValue[1]
+		} else {
+			value = ""
 		}
 
 		if _, exist := ids[key]; !exist {
-			ids[key] = struct{}{}
+			ids[key] = value
 		}
 	}
 
 	return ids
 }
 
-func (e *Exporter) resolveTdAgentIdWithProcessNamePrefix(lines []string) (map[string]struct{}, error) {
-	ids := make(map[string]struct{})
+func (e *Exporter) resolveTdAgentIdWithProcessNamePrefix(lines []string) (map[string]string, error) {
+	ids := make(map[string]string)
 	for _, line := range lines {
 		log.Debugf("resolveTdAgentIdWithProcessNamePrefix line = %s", line)
 
-		groups := processNamePrefixRegex.FindStringSubmatch(line)
-		if len(groups) == 0 {
+		groupsKey := processNamePrefixRegex.FindStringSubmatch(line)
+		if len(groupsKey) == 0 {
 			err := fmt.Errorf("Process not found. fluentd.process_name_prefix = `%s`", processNamePrefixRegex)
 			log.Error(err)
 			return nil, err
 		}
 
-		key := groups[1]
+		key := groupsKey[1]
 
 		log.Debugf("key = %s", key)
 
+		var value string
+		groupsValue := tdAgentPathRegex.FindStringSubmatch(line)
+		if len(groupsValue) > 0 {
+			value = tdAgentLaunchCommand + groupsValue[1]
+		} else {
+			value = ""
+		}
+
 		if _, exist := ids[key]; !exist {
-			ids[key] = struct{}{}
+			ids[key] = value
 		}
 	}
 
 	return ids, nil
 }
 
-func (e *Exporter) getProcStat(tdAgentId string) (procfs.ProcStat, error) {
+func (e *Exporter) getProcStat(tdAgentId string, tdAgentCommand string) (procfs.ProcStat, error) {
 	procfsPath := procfs.DefaultMountPoint
 	fs, err := procfs.NewFS(procfsPath)
 	if err != nil {
@@ -239,10 +258,12 @@ func (e *Exporter) getProcStat(tdAgentId string) (procfs.ProcStat, error) {
 		return procfs.ProcStat{}, err
 	}
 
-	targetPid, err := e.resolveTargetPid(tdAgentId)
+	targetPid, err := e.resolveTargetPid(tdAgentId, tdAgentCommand)
 	if err != nil {
 		return procfs.ProcStat{}, err
 	}
+
+	log.Debugf("targetPid = %v", targetPid)
 
 	proc, err := fs.NewProc(targetPid)
 	if err != nil {
@@ -259,23 +280,22 @@ func (e *Exporter) getProcStat(tdAgentId string) (procfs.ProcStat, error) {
 	return procStat, nil
 }
 
-func (e *Exporter) resolveTargetPid(tdAgentId string) (int, error) {
+func (e *Exporter) resolveTargetPid(tdAgentId string, tdAgentCommand string) (int, error) {
 	var pgrepArg string
 
 	if *processNamePrefix == "" {
-		if tdAgentId == "default" {
-			// find with binary file path
-			pgrepArg = "/usr/sbin/td-agent"
-		} else {
+		if strings.HasSuffix(tdAgentId, ".conf") {
 			pgrepArg = tdAgentId + ".conf"
+		} else {
+			pgrepArg = tdAgentCommand
 		}
 	} else {
-		pgrepArg = tdAgentId
+		pgrepArg = ":" + tdAgentId
 	}
 
-	log.Debugf("pgrep arg = %s", pgrepArg)
+	log.Debugf("pgrep arg = [%s]", pgrepArg)
 
-	out, err := exec.Command("pgrep", "-n", "-f", pgrepArg).Output()
+	out, err := exec.Command("pgrep", "-n", "-f", strings.Replace(pgrepArg, " ", "\\ ", -1)).Output()
 	if err != nil {
 		log.Error(err)
 		return 0, err
