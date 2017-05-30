@@ -22,7 +22,7 @@ log.level | Log level | info |
 
 # Usage
 
-## In case of using `process_name` within a `td-agent.conf`
+## In case of use `process_name` within a `td-agent.conf`
 
 e.g.
 
@@ -98,7 +98,7 @@ The following metrics are exported:
   td_agent_virtual_memory_usage{id="foo_2"} 1.97156864e+08
   ```
 
-## In case of don't using `process_name` within a `td-agent.conf`
+## In case of don't use `process_name` within a `td-agent.conf`
 
 e.g.
 
@@ -126,7 +126,6 @@ e.g.
   <source>
     @type forward
   </source>
-  ```
   ```
 
 - processes
