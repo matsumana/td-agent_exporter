@@ -284,11 +284,7 @@ func (e *Exporter) resolveTargetPid(tdAgentId string, tdAgentCommand string) (in
 	var pgrepArg string
 
 	if *processNamePrefix == "" {
-		if strings.HasSuffix(tdAgentId, ".conf") {
-			pgrepArg = tdAgentId + ".conf"
-		} else {
-			pgrepArg = tdAgentCommand
-		}
+		pgrepArg = tdAgentCommand
 	} else {
 		pgrepArg = ":" + tdAgentId
 	}
