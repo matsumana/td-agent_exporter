@@ -93,19 +93,23 @@ func TestUnitResolveLabelWithConfigFileName(t *testing.T) {
 		t.Error("labels size doesn't match")
 	}
 
-	if _, exist := labels["default"]; !exist {
+	if value, ok := labels["default"]; !ok &&
+		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid" {
 		t.Error("labels `default` doesn't exist")
 	}
 
-	if _, exist := labels["td-agent_1"]; !exist {
+	if value, ok := labels["td-agent_1"]; !ok &&
+		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf" {
 		t.Error("labels `td-agent_1` doesn't exist")
 	}
 
-	if _, exist := labels["td-agent_2"]; !exist {
+	if value, ok := labels["td-agent_2"]; !ok &&
+		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf" {
 		t.Error("labels `td-agent_2` doesn't exist")
 	}
 
-	if _, exist := labels["td-agent_3"]; !exist {
+	if value, ok := labels["td-agent_3"]; !ok &&
+		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf" {
 		t.Error("labels `td-agent_3` doesn't exist")
 	}
 }
@@ -127,11 +131,11 @@ func TestUnitResolveLabelWithProcessNamePrefix(t *testing.T) {
 		t.Error("labels size doesn't match")
 	}
 
-	if _, exist := labels["foo_a"]; !exist {
+	if value, ok := labels["foo_a"]; !ok && value == "worker:foo_a" {
 		t.Error("labels `foo_a` doesn't exist")
 	}
 
-	if _, exist := labels["foo_b"]; !exist {
+	if value, ok := labels["foo_b"]; !ok && value == "worker:foo_b" {
 		t.Error("labels `foo_b` doesn't exist")
 	}
 }
