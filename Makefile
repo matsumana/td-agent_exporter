@@ -70,4 +70,4 @@ check-github-token:
 	if [ ! -f "./github_token" ]; then echo 'file github_token is required'; exit 1 ; fi
 
 release: build-with-docker check-github-token
-	ghr -u $(GITHUB_USERNAME) -t $(shell cat github_token) --draft --replace $(VERSION) $(BIN_DIR)
+	ghr -u $(GITHUB_USERNAME) -t $(shell cat github_token) --draft --replace $(VERSION) $(BIN_DIR)/td-agent_exporter-$(VERSION).*.tar.gz
