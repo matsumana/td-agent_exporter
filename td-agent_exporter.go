@@ -199,7 +199,7 @@ func (e *Exporter) resolveTdAgentIdWithConfigFileName(lines []string) map[string
 			// doesn't use config file
 			key = "default"
 		} else {
-			key = groupsKey[2]
+			key = strings.Trim(groupsKey[2], " ")
 		}
 
 		var value string
@@ -230,7 +230,7 @@ func (e *Exporter) resolveTdAgentIdWithProcessNamePrefix(lines []string) (map[st
 			return nil, err
 		}
 
-		key := groupsKey[1]
+		key := strings.Trim(groupsKey[1], " ")
 
 		log.Debugf("key = %s", key)
 

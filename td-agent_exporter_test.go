@@ -20,8 +20,8 @@ func TestUnitFilterWithoutProcessNamePrefix(t *testing.T) {
 		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
 		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
 		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf",
-		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf",
+		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
 		"root      2489     1  0 07:07 ?        00:00:00 supervisor:foo_a",
 		"root      2492  2489  0 07:07 ?        00:00:00 worker:foo_a",
 		"root      2502     1  0 07:07 ?        00:00:00 supervisor:foo_b",
@@ -50,8 +50,8 @@ func TestUnitFilterWithProcessNamePrefix(t *testing.T) {
 		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
 		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
 		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf",
-		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf",
+		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
 		"root      2489     1  0 07:07 ?        00:00:00 supervisor:foo_a",
 		"root      2492  2489  0 07:07 ?        00:00:00 worker:foo_a",
 		"root      2502     1  0 07:07 ?        00:00:00 supervisor:foo_b",
@@ -78,8 +78,8 @@ func TestUnitResolveLabelWithConfigFileName(t *testing.T) {
 		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
 		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
 		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf",
-		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf",
+		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
 	}
 
 	processName := ""
@@ -117,7 +117,7 @@ func TestUnitResolveLabelWithConfigFileName(t *testing.T) {
 func TestUnitResolveLabelWithProcessNamePrefix(t *testing.T) {
 	lines := []string{
 		"root      2492  2489  0 07:07 ?        00:00:00 worker:foo_a",
-		"root      2505  2502  0 07:07 ?        00:00:00 worker:foo_b",
+		"root      2505  2502  0 07:07 ?        00:00:00 worker:foo_b    ",
 	}
 
 	processName := "foo"
@@ -131,11 +131,11 @@ func TestUnitResolveLabelWithProcessNamePrefix(t *testing.T) {
 		t.Error("labels size doesn't match")
 	}
 
-	if value, ok := labels["foo_a"]; !ok && value == "worker:foo_a" {
+	if _, ok := labels["foo_a"]; !ok {
 		t.Error("labels `foo_a` doesn't exist")
 	}
 
-	if value, ok := labels["foo_b"]; !ok && value == "worker:foo_b" {
+	if _, ok := labels["foo_b"]; !ok {
 		t.Error("labels `foo_b` doesn't exist")
 	}
 }
