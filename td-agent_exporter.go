@@ -38,7 +38,7 @@ type Exporter struct {
 	mutex sync.RWMutex
 
 	scrapeFailures prometheus.Counter
-	cpuTime        *prometheus.CounterVec
+	cpuTime        *prometheus.GaugeVec
 	virtualMemory  *prometheus.GaugeVec
 	residentMemory *prometheus.GaugeVec
 	tdAgentUp      prometheus.Gauge
@@ -51,8 +51,8 @@ func NewExporter() *Exporter {
 			Name:      "exporter_scrape_failures_total",
 			Help:      "Number of errors while scraping td-agent.",
 		}),
-		cpuTime: prometheus.NewCounterVec(
-			prometheus.CounterOpts{
+		cpuTime: prometheus.NewGaugeVec(
+			prometheus.GaugeOpts{
 				Namespace: namespace,
 				Name:      "cpu_time",
 				Help:      "td-agent cpu time",
@@ -121,7 +121,7 @@ func (e *Exporter) collect(ch chan<- prometheus.Metric) {
 			continue
 		}
 
-		e.cpuTime.WithLabelValues(id).Add(procStat.CPUTime())
+		e.cpuTime.WithLabelValues(id).Set(procStat.CPUTime())
 		e.virtualMemory.WithLabelValues(id).Set(float64(procStat.VirtualMemory()))
 		e.residentMemory.WithLabelValues(id).Set(float64(procStat.ResidentMemory()))
 
