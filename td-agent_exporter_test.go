@@ -4,9 +4,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"regexp"
+	"time"
 
 	log "github.com/Sirupsen/logrus"
-	"regexp"
 )
 
 // unit test
@@ -144,6 +145,8 @@ func TestUnitResolveLabelWithProcessNamePrefix(t *testing.T) {
 func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 
 	for i := 0; i < 30; i++ {
+		time.Sleep(1 * time.Second)
+
 		metrics, err := get("http://localhost:9256/metrics")
 		if err != nil {
 			t.Error("HttpClient.Get = %v", err)
@@ -203,6 +206,8 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 func TestE2EWithProcessNamePrefix(t *testing.T) {
 
 	for i := 0; i < 30; i++ {
+		time.Sleep(1 * time.Second)
+
 		metrics, err := get("http://localhost:19256/metrics")
 		if err != nil {
 			t.Error("HttpClient.Get = %v", err)
