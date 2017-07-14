@@ -3,8 +3,8 @@ package main
 import (
 	"io/ioutil"
 	"net/http"
-	"testing"
 	"regexp"
+	"testing"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
