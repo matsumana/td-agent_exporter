@@ -99,10 +99,10 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 }
 
 func (e *Exporter) collect(ch chan<- prometheus.Metric) {
-	e.tdAgentUp.Set(0)
-
 	ids, err := e.resolveTdAgentId()
 	if err != nil {
+		e.tdAgentUp.Set(0)
+		e.tdAgentUp.Collect(ch)
 		e.scrapeFailures.Inc()
 		e.scrapeFailures.Collect(ch)
 		return
@@ -127,6 +127,8 @@ func (e *Exporter) collect(ch chan<- prometheus.Metric) {
 
 		processes++
 	}
+
+	log.Debugf("td-agent processes = %v", processes)
 
 	e.tdAgentUp.Set(float64(processes))
 
