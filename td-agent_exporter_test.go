@@ -192,7 +192,7 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 	}
 
 	// td_agent_up
-	if !regexp.MustCompile("td_agent_up 4").MatchString(metrics) {
+	if !regexp.MustCompile("td_agent_up 14").MatchString(metrics) {
 		t.Error("td_agent_up doesn't match")
 	}
 }
@@ -230,7 +230,7 @@ func TestE2EWithProcessNamePrefix(t *testing.T) {
 	}
 
 	// td_agent_up
-	if !regexp.MustCompile("td_agent_up 2").MatchString(metrics) {
+	if !regexp.MustCompile("td_agent_up 13").MatchString(metrics) {
 		t.Error("td_agent_up doesn't match")
 	}
 }
