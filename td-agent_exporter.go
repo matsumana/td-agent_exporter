@@ -161,7 +161,7 @@ func (e *Exporter) resolveTdAgentId() (map[string]string, error) {
 }
 
 func (e *Exporter) execPsCommand() (string, error) {
-	ps, err := exec.Command("ps", "-C", "ruby", "-f").Output()
+	ps, err := exec.Command("ps", "-e", "-f").Output()
 	if err != nil {
 		log.Error(err)
 		return "", err
