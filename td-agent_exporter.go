@@ -20,8 +20,8 @@ var (
 	// command line parameters
 	listenAddress     = flag.String("web.listen-address", "9256", "Address on which to expose metrics and web interface.")
 	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
-	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 	processFileName   = flag.String("fluentd.process_file_name", "ruby", "fluentd's process file name.")
+	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 
 	processNameRegex       = regexp.MustCompile(`\s/usr/sbin/td-agent\s*`)
 	tdAgentPathRegex       = regexp.MustCompile("\\s" + strings.Replace(tdAgentLaunchCommand, " ", "\\s", -1) + "(.+)?\\s*")

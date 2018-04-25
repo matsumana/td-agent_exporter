@@ -17,6 +17,7 @@ Name     | Description | Default | note
 ---------|-------------|----|----
 web.listen-address | Address on which to expose metrics and web interface | 9256 |
 web.telemetry-path | Path under which to expose metrics | /metrics |
+fluentd.process_file_name | Pfluentd's process file name. | ruby | For example, td-agent is being executed from supervisord, specify "td-agent".
 fluentd.process_name_prefix | fluentd's process_name prefix | | see also: [Fluentd official documentation](http://docs.fluentd.org/v0.12/articles/config-file#processname)
 log.level | Log level | info |
 
