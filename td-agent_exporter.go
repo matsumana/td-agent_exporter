@@ -20,6 +20,7 @@ var (
 	// command line parameters
 	listenAddress     = flag.String("web.listen-address", "9256", "Address on which to expose metrics and web interface.")
 	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
+	processFileName   = flag.String("fluentd.process_file_name", "ruby", "fluentd's process file name.")
 	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 
 	processNameRegex       = regexp.MustCompile(`\s/usr/sbin/td-agent\s*`)
@@ -161,7 +162,7 @@ func (e *Exporter) resolveTdAgentId() (map[string]string, error) {
 }
 
 func (e *Exporter) execPsCommand() (string, error) {
-	ps, err := exec.Command("ps", "-C", "ruby", "-f").Output()
+	ps, err := exec.Command("ps", "-C", *processFileName, "-f").Output()
 	if err != nil {
 		log.Error(err)
 		return "", err

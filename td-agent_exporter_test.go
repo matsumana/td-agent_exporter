@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -11,6 +12,42 @@ import (
 )
 
 // unit test
+func TestParseArgDefaultValues(t *testing.T) {
+	parseTargetArgs := []string{}
+	flag.CommandLine.Parse(parseTargetArgs)
+
+	if *listenAddress != "9256" {
+		t.Errorf("listenAddress default value want %v but %v.", "9256", *listenAddress)
+	}
+	if *metricsPath != "/metrics" {
+		t.Errorf("metricsPath default value want %v but %v.", "/metrics", *metricsPath)
+	}
+	if *processFileName != "ruby" {
+		t.Errorf("processFileName default value want %v but %v.", "ruby", *processFileName)
+	}
+	if *processNamePrefix != "" {
+		t.Errorf("processNamePrefix default value want %v but %v.", "", *processNamePrefix)
+	}
+}
+
+func TestParseArgSpecifiedValues(t *testing.T) {
+	parseTargetArgs := []string{"-web.listen-address", "19256", "-web.telemetry-path", "/metricsPath", "-fluentd.process_file_name", "td-agent", "-fluentd.process_name_prefix", "prefix"}
+	flag.CommandLine.Parse(parseTargetArgs)
+
+	if *listenAddress != "19256" {
+		t.Errorf("listenAddress default value want %v but %v.", "19256", *listenAddress)
+	}
+	if *metricsPath != "/metricsPath" {
+		t.Errorf("metricsPath default value want %v but %v.", "/metricsPath", *metricsPath)
+	}
+	if *processFileName != "td-agent" {
+		t.Errorf("processFileName default value want %v but %v.", "td-agent", *processFileName)
+	}
+	if *processNamePrefix != "prefix" {
+		t.Errorf("processNamePrefix default value want %v but %v.", "prefix", *processNamePrefix)
+	}
+}
+
 func TestUnitFilterWithoutProcessNamePrefix(t *testing.T) {
 	lines := []string{
 		"UID        PID  PPID  C STIME TTY          TIME CMD",
@@ -149,7 +186,7 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 
 		metrics, err := get("http://localhost:9256/metrics")
 		if err != nil {
-			t.Error("HttpClient.Get = %v", err)
+			t.Errorf("HttpClient.Get = %v", err)
 		}
 
 		log.Info(metrics)
@@ -200,6 +237,14 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 		if !regexp.MustCompile("td_agent_up 14").MatchString(metrics) {
 			t.Error("td_agent_up doesn't match")
 		}
+
+		// Different process file name processes are not mathed.
+		if regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
+			t.Error("Process from /opt/td-agent/embedded/bin/fluentd shouldn't match")
+		}
+		if regexp.MustCompile(`td_agent_cpu_time\{id="from_td-agent"\} `).MatchString(metrics) {
+			t.Error("Process from /usr/sbin/td-agent shouldn't match")
+		}
 	}
 }
 
@@ -210,7 +255,7 @@ func TestE2EWithProcessNamePrefix(t *testing.T) {
 
 		metrics, err := get("http://localhost:19256/metrics")
 		if err != nil {
-			t.Error("HttpClient.Get = %v", err)
+			t.Errorf("HttpClient.Get = %v", err)
 		}
 
 		log.Info(metrics)
@@ -241,6 +286,74 @@ func TestE2EWithProcessNamePrefix(t *testing.T) {
 
 		// td_agent_up
 		if !regexp.MustCompile("td_agent_up 13").MatchString(metrics) {
+			t.Error("td_agent_up doesn't match")
+		}
+	}
+}
+
+func TestE2EWithProcessFileNameFluentd(t *testing.T) {
+
+	for i := 0; i < 30; i++ {
+		time.Sleep(1 * time.Second)
+
+		metrics, err := get("http://localhost:29256/metrics")
+		if err != nil {
+			t.Errorf("HttpClient.Get = %v", err)
+		}
+
+		log.Info(metrics)
+
+		// td_agent_cpu_time
+		if !regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
+			t.Error(`td_agent_cpu_time{id="from_fluentd"} doesn't match`)
+		}
+
+		// td_agent_resident_memory_usage
+		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
+			t.Error(`td_agent_resident_memory_usage{id="from_fluentd"} doesn't match`)
+		}
+
+		// td_agent_virtual_memory_usage
+		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
+			t.Error(`td_agent_virtual_memory_usage{id="from_fluentd"} doesn't match`)
+		}
+
+		// td_agent_up
+		if !regexp.MustCompile("td_agent_up 1").MatchString(metrics) {
+			t.Error("td_agent_up doesn't match")
+		}
+	}
+}
+
+func TestE2EWithProcessFileNameTDAgent(t *testing.T) {
+
+	for i := 0; i < 30; i++ {
+		time.Sleep(1 * time.Second)
+
+		metrics, err := get("http://localhost:39256/metrics")
+		if err != nil {
+			t.Errorf("HttpClient.Get = %v", err)
+		}
+
+		log.Info(metrics)
+
+		// td_agent_cpu_time
+		if !regexp.MustCompile(`td_agent_cpu_time\{id="from_td_agent"\} `).MatchString(metrics) {
+			t.Error(`td_agent_cpu_time{id="from_td_agent"} doesn't match`)
+		}
+
+		// td_agent_resident_memory_usage
+		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
+			t.Error(`td_agent_resident_memory_usage{id="from_td_agent"} doesn't match`)
+		}
+
+		// td_agent_virtual_memory_usage
+		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
+			t.Error(`td_agent_virtual_memory_usage{id="from_td_agent"} doesn't match`)
+		}
+
+		// td_agent_up
+		if !regexp.MustCompile("td_agent_up 1").MatchString(metrics) {
 			t.Error("td_agent_up doesn't match")
 		}
 	}
