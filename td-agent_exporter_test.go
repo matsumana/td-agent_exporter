@@ -149,7 +149,7 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 
 		metrics, err := get("http://localhost:9256/metrics")
 		if err != nil {
-			t.Error("HttpClient.Get = %v", err)
+			t.Errorf("HttpClient.Get = %v", err)
 		}
 
 		log.Info(metrics)
@@ -210,7 +210,7 @@ func TestE2EWithProcessNamePrefix(t *testing.T) {
 
 		metrics, err := get("http://localhost:19256/metrics")
 		if err != nil {
-			t.Error("HttpClient.Get = %v", err)
+			t.Errorf("HttpClient.Get = %v", err)
 		}
 
 		log.Info(metrics)
