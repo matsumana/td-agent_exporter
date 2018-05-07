@@ -181,181 +181,173 @@ func TestUnitResolveLabelWithProcessNamePrefix(t *testing.T) {
 // e2e test
 func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 
-	for i := 0; i < 30; i++ {
-		time.Sleep(1 * time.Second)
+	time.Sleep(1 * time.Second)
 
-		metrics, err := get("http://localhost:9256/metrics")
-		if err != nil {
-			t.Errorf("HttpClient.Get = %v", err)
-		}
+	metrics, err := get("http://localhost:9256/metrics")
+	if err != nil {
+		t.Errorf("HttpClient.Get = %v", err)
+	}
 
-		log.Info(metrics)
+	log.Info(metrics)
 
-		// td_agent_cpu_time
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="default"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="default"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_1"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="td-agent_1"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_2"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="td-agent_2"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_3"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="td-agent_3"} doesn't match`)
-		}
+	// td_agent_cpu_time
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="default"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="default"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_1"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="td-agent_1"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_2"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="td-agent_2"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_3"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="td-agent_3"} doesn't match`)
+	}
 
-		// td_agent_resident_memory_usage
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="default"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="default"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_1"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="td-agent_1"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_2"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="td-agent_2"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_3"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="td-agent_3"} doesn't match`)
-		}
+	// td_agent_resident_memory_usage
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="default"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="default"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_1"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="td-agent_1"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_2"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="td-agent_2"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_3"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="td-agent_3"} doesn't match`)
+	}
 
-		// td_agent_virtual_memory_usage
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="default"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="default"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_1"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="td-agent_1"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_2"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="td-agent_2"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_3"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="td-agent_3"} doesn't match`)
-		}
+	// td_agent_virtual_memory_usage
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="default"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="default"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_1"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="td-agent_1"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_2"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="td-agent_2"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_3"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="td-agent_3"} doesn't match`)
+	}
 
-		// td_agent_up
-		if !regexp.MustCompile("td_agent_up 14").MatchString(metrics) {
-			t.Error("td_agent_up doesn't match")
-		}
+	// td_agent_up
+	if !regexp.MustCompile("td_agent_up 14").MatchString(metrics) {
+		t.Error("td_agent_up doesn't match")
+	}
 
-		// Different process file name processes are not mathed.
-		if regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
-			t.Error("Process from /opt/td-agent/embedded/bin/fluentd shouldn't match")
-		}
-		if regexp.MustCompile(`td_agent_cpu_time\{id="from_td-agent"\} `).MatchString(metrics) {
-			t.Error("Process from /usr/sbin/td-agent shouldn't match")
-		}
+	// Different process file name processes are not mathed.
+	if regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
+		t.Error("Process from /opt/td-agent/embedded/bin/fluentd shouldn't match")
+	}
+	if regexp.MustCompile(`td_agent_cpu_time\{id="from_td-agent"\} `).MatchString(metrics) {
+		t.Error("Process from /usr/sbin/td-agent shouldn't match")
 	}
 }
 
 func TestE2EWithProcessNamePrefix(t *testing.T) {
 
-	for i := 0; i < 30; i++ {
-		time.Sleep(1 * time.Second)
+	time.Sleep(1 * time.Second)
 
-		metrics, err := get("http://localhost:19256/metrics")
-		if err != nil {
-			t.Errorf("HttpClient.Get = %v", err)
-		}
+	metrics, err := get("http://localhost:19256/metrics")
+	if err != nil {
+		t.Errorf("HttpClient.Get = %v", err)
+	}
 
-		log.Info(metrics)
+	log.Info(metrics)
 
-		// td_agent_cpu_time
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="foo_a"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="foo_a"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="foo_b"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="foo_b"} doesn't match`)
-		}
+	// td_agent_cpu_time
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="foo_a"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="foo_a"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="foo_b"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="foo_b"} doesn't match`)
+	}
 
-		// td_agent_resident_memory_usage
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="foo_a"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="foo_a"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="foo_b"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="foo_b"} doesn't match`)
-		}
+	// td_agent_resident_memory_usage
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="foo_a"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="foo_a"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="foo_b"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="foo_b"} doesn't match`)
+	}
 
-		// td_agent_virtual_memory_usage
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="foo_a"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="foo_a"} doesn't match`)
-		}
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="foo_b"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="foo_b"} doesn't match`)
-		}
+	// td_agent_virtual_memory_usage
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="foo_a"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="foo_a"} doesn't match`)
+	}
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="foo_b"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="foo_b"} doesn't match`)
+	}
 
-		// td_agent_up
-		if !regexp.MustCompile("td_agent_up 13").MatchString(metrics) {
-			t.Error("td_agent_up doesn't match")
-		}
+	// td_agent_up
+	if !regexp.MustCompile("td_agent_up 13").MatchString(metrics) {
+		t.Error("td_agent_up doesn't match")
 	}
 }
 
 func TestE2EWithProcessFileNameFluentd(t *testing.T) {
 
-	for i := 0; i < 30; i++ {
-		time.Sleep(1 * time.Second)
+	time.Sleep(1 * time.Second)
 
-		metrics, err := get("http://localhost:29256/metrics")
-		if err != nil {
-			t.Errorf("HttpClient.Get = %v", err)
-		}
+	metrics, err := get("http://localhost:29256/metrics")
+	if err != nil {
+		t.Errorf("HttpClient.Get = %v", err)
+	}
 
-		log.Info(metrics)
+	log.Info(metrics)
 
-		// td_agent_cpu_time
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="from_fluentd"} doesn't match`)
-		}
+	// td_agent_cpu_time
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="from_fluentd"} doesn't match`)
+	}
 
-		// td_agent_resident_memory_usage
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="from_fluentd"} doesn't match`)
-		}
+	// td_agent_resident_memory_usage
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="from_fluentd"} doesn't match`)
+	}
 
-		// td_agent_virtual_memory_usage
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="from_fluentd"} doesn't match`)
-		}
+	// td_agent_virtual_memory_usage
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="from_fluentd"} doesn't match`)
+	}
 
-		// td_agent_up
-		if !regexp.MustCompile("td_agent_up 1").MatchString(metrics) {
-			t.Error("td_agent_up doesn't match")
-		}
+	// td_agent_up
+	if !regexp.MustCompile("td_agent_up 1").MatchString(metrics) {
+		t.Error("td_agent_up doesn't match")
 	}
 }
 
 func TestE2EWithProcessFileNameTDAgent(t *testing.T) {
 
-	for i := 0; i < 30; i++ {
-		time.Sleep(1 * time.Second)
+	time.Sleep(1 * time.Second)
 
-		metrics, err := get("http://localhost:39256/metrics")
-		if err != nil {
-			t.Errorf("HttpClient.Get = %v", err)
-		}
+	metrics, err := get("http://localhost:39256/metrics")
+	if err != nil {
+		t.Errorf("HttpClient.Get = %v", err)
+	}
 
-		log.Info(metrics)
+	log.Info(metrics)
 
-		// td_agent_cpu_time
-		if !regexp.MustCompile(`td_agent_cpu_time\{id="from_td_agent"\} `).MatchString(metrics) {
-			t.Error(`td_agent_cpu_time{id="from_td_agent"} doesn't match`)
-		}
+	// td_agent_cpu_time
+	if !regexp.MustCompile(`td_agent_cpu_time\{id="from_td_agent"\} `).MatchString(metrics) {
+		t.Error(`td_agent_cpu_time{id="from_td_agent"} doesn't match`)
+	}
 
-		// td_agent_resident_memory_usage
-		if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
-			t.Error(`td_agent_resident_memory_usage{id="from_td_agent"} doesn't match`)
-		}
+	// td_agent_resident_memory_usage
+	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
+		t.Error(`td_agent_resident_memory_usage{id="from_td_agent"} doesn't match`)
+	}
 
-		// td_agent_virtual_memory_usage
-		if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
-			t.Error(`td_agent_virtual_memory_usage{id="from_td_agent"} doesn't match`)
-		}
+	// td_agent_virtual_memory_usage
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
+		t.Error(`td_agent_virtual_memory_usage{id="from_td_agent"} doesn't match`)
+	}
 
-		// td_agent_up
-		if !regexp.MustCompile("td_agent_up 1").MatchString(metrics) {
-			t.Error("td_agent_up doesn't match")
-		}
+	// td_agent_up
+	if !regexp.MustCompile("td_agent_up 1").MatchString(metrics) {
+		t.Error("td_agent_up doesn't match")
 	}
 }
 
