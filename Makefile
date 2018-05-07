@@ -76,8 +76,12 @@ e2etest_setup:
 	/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_k.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_k.pid --config /etc/td-agent/td-agent_k.conf
 	/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_l.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_l.pid --config /etc/td-agent/td-agent_l.conf
 	/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_m.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_m.pid --config /etc/td-agent/td-agent_m.conf
+	/opt/td-agent/embedded/bin/fluentd --use-v1-config --config /etc/td-agent/td-agent_from_fluent.conf --no-supervisor &
+	/usr/sbin/td-agent --use-v1-config --config /etc/td-agent/td-agent_from_td_agent.conf --no-supervisor &
 	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug &
 	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug -web.listen-address=19256 -fluentd.process_name_prefix=foo &
+	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug -web.listen-address=29256 -fluentd.process_file_name=fluentd &
+	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug -web.listen-address=39256 -fluentd.process_file_name=td-agent &
 
 	# Wait for td-agent_exporter to start up
 	sleep 3
