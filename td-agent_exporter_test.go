@@ -356,18 +356,18 @@ func get(url string) (string, error) {
 
 	response, err := http.Get(url)
 	if err != nil {
-		log.Error("http.Get = %v", err)
+		log.Errorf("http.Get = %v", err)
 		return "", err
 	}
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Error("ioutil.ReadAll = %v", err)
+		log.Errorf("ioutil.ReadAll = %v", err)
 		return "", err
 	}
 	if response.StatusCode != 200 {
-		log.Error("response.StatusCode = %v", response.StatusCode)
+		log.Errorf("response.StatusCode = %v", response.StatusCode)
 		return "", err
 	}
 
