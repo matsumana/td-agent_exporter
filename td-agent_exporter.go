@@ -23,7 +23,7 @@ var (
 	processFileName   = flag.String("fluentd.process_file_name", "ruby", "fluentd's process file name.")
 	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 
-	processNameRegex       = regexp.MustCompile(`\s/usr/sbin/td-agent\s*`)
+	processNameRegex       = regexp.MustCompile(`\s/opt/td-agent/bin/fluentd\s*`)
 	tdAgentPathRegex       = regexp.MustCompile("\\s" + strings.Replace(tdAgentLaunchCommand, " ", "\\s", -1) + "(.+)?\\s*")
 	configFileNameRegex    = regexp.MustCompile(`\s(-c|--config)\s.*/(.+)\.conf\s*`)
 	processNamePrefixRegex = regexp.MustCompile(`\sworker:(.+)?\s*`)
@@ -32,7 +32,7 @@ var (
 const (
 	// Can't use '-' for the metric name
 	namespace            = "td_agent"
-	tdAgentLaunchCommand = "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent "
+	tdAgentLaunchCommand = "/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd "
 )
 
 type Exporter struct {
