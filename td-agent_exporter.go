@@ -12,7 +12,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prometheus/log"
+	"github.com/prometheus/common/log"
 	"github.com/prometheus/procfs"
 )
 
@@ -268,13 +268,13 @@ func (e *Exporter) getProcStat(tdAgentId string, tdAgentCommand string) (procfs.
 
 	log.Debugf("targetPid = %v", targetPid)
 
-	proc, err := fs.NewProc(targetPid)
+	proc, err := fs.Proc(targetPid)
 	if err != nil {
 		log.Error(err)
 		return procfs.ProcStat{}, err
 	}
 
-	procStat, err := proc.NewStat()
+	procStat, err := proc.Stat()
 	if err != nil {
 		log.Error(err)
 		return procfs.ProcStat{}, err

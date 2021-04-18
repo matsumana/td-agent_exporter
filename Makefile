@@ -1,24 +1,25 @@
 VERSION=$(patsubst "%",%,$(lastword $(shell grep "version\s*=\s" version.go)))
-BIN_DIR=bin
-BUILD_GOLANG_VERSION=1.8.3
+OUT_DIR=out
+WORK_DIR_CONTAINER=/go/src/github.com/matsumana/td-agent_exporter
+BUILD_GOLANG_VERSION=1.16.3
 CENTOS_VERSION=7
 GITHUB_USERNAME=matsumana
 
 .PHONY : build-with-docker
 build-with-docker:
-	docker run --rm -v "$(PWD)":/go/src/github.com/matsumana/td-agent_exporter -w /go/src/github.com/matsumana/td-agent_exporter golang:$(BUILD_GOLANG_VERSION) bash -c 'make build-all'
+	docker run --rm -v "$(PWD)":$(WORK_DIR_CONTAINER) -w $(WORK_DIR_CONTAINER) golang:$(BUILD_GOLANG_VERSION) bash -c 'make build-all'
 
 .PHONY : build-with-circleci
 build-with-circleci:
-	docker run -v "$(PWD)":/go/src/github.com/matsumana/td-agent_exporter -w /go/src/github.com/matsumana/td-agent_exporter golang:$(BUILD_GOLANG_VERSION) bash -c 'make build-all'
+	docker run -v "$(PWD)":$(WORK_DIR_CONTAINER) -w $(WORK_DIR_CONTAINER) golang:$(BUILD_GOLANG_VERSION) bash -c 'make build-all'
 
 .PHONY : unittest-with-circleci
 unittest-with-circleci:
-	docker run -v "$(PWD)":/go/src/github.com/matsumana/td-agent_exporter -w /go/src/github.com/matsumana/td-agent_exporter golang:$(BUILD_GOLANG_VERSION) bash -c 'make unittest'
+	docker run -v "$(PWD)":$(WORK_DIR_CONTAINER) -w $(WORK_DIR_CONTAINER) golang:$(BUILD_GOLANG_VERSION) bash -c 'make unittest'
 
 .PHONY : e2etest-with-circleci
 e2etest-with-circleci:
-	docker run -v "$(PWD)":/go/src/github.com/matsumana/td-agent_exporter -w /go/src/github.com/matsumana/td-agent_exporter -e BUILD_GOLANG_VERSION=$(BUILD_GOLANG_VERSION) centos:$(CENTOS_VERSION) bash -c 'yum install -y make && make e2etest'
+	docker run -v "$(PWD)":$(WORK_DIR_CONTAINER) -w $(WORK_DIR_CONTAINER) -e BUILD_GOLANG_VERSION=$(BUILD_GOLANG_VERSION) centos:$(CENTOS_VERSION) bash -c 'yum install -y make && make e2etest'
 
 .PHONY : build-all
 build-all: build-linux
@@ -28,10 +29,10 @@ build-linux:
 	make build GOOS=linux GOARCH=amd64
 
 build:
-	rm -rf $(BIN_DIR)/td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH)*
+	rm -rf $(OUT_DIR)/td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH)*
 	go fmt
-	go build -o $(BIN_DIR)/td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH)/td-agent_exporter
-	tar cvfz $(BIN_DIR)/td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH).tar.gz -C $(BIN_DIR) td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH)
+	go build -o $(OUT_DIR)/td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH)/td-agent_exporter
+	tar cvfz $(OUT_DIR)/td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH).tar.gz -C $(OUT_DIR) td-agent_exporter-$(VERSION).$(GOOS)-$(GOARCH)
 
 .PHONY : unittest
 unittest:
@@ -41,10 +42,15 @@ unittest:
 .PHONY : e2etest
 e2etest:
 	make e2etest_setup
-	GOROOT=/usr/local/go GOPATH=/go /usr/local/go/bin/go test -run E2E
+	/usr/local/go/bin/go test -run E2E
 
 .PHONY : e2etest_setup
 e2etest_setup:
+	# Go
+	yum install -y git gcc
+	curl -L https://storage.googleapis.com/golang/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz > /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz
+	tar xvf /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz -C /usr/local
+
 	# td-agent
 	yum install -y sudo
 	curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent2.sh | sh
@@ -78,21 +84,18 @@ e2etest_setup:
 	/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_m.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_m.pid --config /etc/td-agent/td-agent_m.conf
 	/opt/td-agent/embedded/bin/fluentd --use-v1-config --config /etc/td-agent/td-agent_from_fluent.conf --no-supervisor &
 	/usr/sbin/td-agent --use-v1-config --config /etc/td-agent/td-agent_from_td_agent.conf --no-supervisor &
-	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug &
-	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug -web.listen-address=19256 -fluentd.process_name_prefix=foo &
-	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug -web.listen-address=29256 -fluentd.process_name_prefix=from -fluentd.process_file_name=fluentd &
-	/go/src/github.com/matsumana/td-agent_exporter/bin/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug -web.listen-address=39256 -fluentd.process_name_prefix=from -fluentd.process_file_name=td-agent &
 
 	# Wait for td-agent_exporter to start up
 	sleep 3
 
-	# golang
-	yum install -y git
-	curl -L https://storage.googleapis.com/golang/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz > /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz
-	tar xvf /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz -C /usr/local
+	# td-agent_exporter
+	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter &
+	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=19256 -fluentd.process_name_prefix=foo &
+	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=29256 -fluentd.process_name_prefix=from -fluentd.process_file_name=fluentd &
+	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=39256 -fluentd.process_name_prefix=from -fluentd.process_file_name=td-agent &
 
 check-github-token:
 	if [ ! -f "./github_token" ]; then echo 'file github_token is required'; exit 1 ; fi
 
 release: build-with-docker check-github-token
-	ghr -u $(GITHUB_USERNAME) -t $(shell cat github_token) --draft --replace $(VERSION) $(BIN_DIR)/td-agent_exporter-$(VERSION).*.tar.gz
+	ghr -u $(GITHUB_USERNAME) -t $(shell cat github_token) --draft --replace $(VERSION) $(OUT_DIR)/td-agent_exporter-$(VERSION).*.tar.gz

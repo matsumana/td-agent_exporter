@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/prometheus/common/log"
 )
 
 // unit test
@@ -191,44 +191,44 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 	log.Info(metrics)
 
 	// td_agent_cpu_time
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="default"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="default"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="default"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_1"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="td-agent_1"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="td-agent_1"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_2"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="td-agent_2"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="td-agent_2"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="td-agent_3"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="td-agent_3"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="td-agent_3"} doesn't match`)
 	}
 
 	// td_agent_resident_memory_usage
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="default"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="default"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="default"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_1"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="td-agent_1"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="td-agent_1"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_2"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="td-agent_2"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="td-agent_2"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="td-agent_3"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="td-agent_3"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="td-agent_3"} doesn't match`)
 	}
 
 	// td_agent_virtual_memory_usage
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="default"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="default"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="default"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_1"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="td-agent_1"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="td-agent_1"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_2"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="td-agent_2"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="td-agent_2"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="td-agent_3"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="td-agent_3"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="td-agent_3"} doesn't match`)
 	}
 
@@ -238,10 +238,10 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 	}
 
 	// Different process file name processes are not mathed.
-	if regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
+	if regexp.MustCompile(`td_agent_cpu_time{id="from_fluentd"} `).MatchString(metrics) {
 		t.Error("Process from /opt/td-agent/embedded/bin/fluentd shouldn't match")
 	}
-	if regexp.MustCompile(`td_agent_cpu_time\{id="from_td-agent"\} `).MatchString(metrics) {
+	if regexp.MustCompile(`td_agent_cpu_time{id="from_td-agent"} `).MatchString(metrics) {
 		t.Error("Process from /usr/sbin/td-agent shouldn't match")
 	}
 }
@@ -258,26 +258,26 @@ func TestE2EWithProcessNamePrefix(t *testing.T) {
 	log.Info(metrics)
 
 	// td_agent_cpu_time
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="foo_a"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="foo_a"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="foo_a"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="foo_b"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="foo_b"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="foo_b"} doesn't match`)
 	}
 
 	// td_agent_resident_memory_usage
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="foo_a"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="foo_a"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="foo_a"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="foo_b"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="foo_b"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="foo_b"} doesn't match`)
 	}
 
 	// td_agent_virtual_memory_usage
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="foo_a"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="foo_a"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="foo_a"} doesn't match`)
 	}
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="foo_b"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="foo_b"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="foo_b"} doesn't match`)
 	}
 
@@ -299,17 +299,17 @@ func TestE2EWithProcessFileNameFluentd(t *testing.T) {
 	log.Info(metrics)
 
 	// td_agent_cpu_time
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="from_fluentd"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="from_fluentd"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="from_fluentd"} doesn't match`)
 	}
 
 	// td_agent_resident_memory_usage
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="from_fluentd"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="from_fluentd"} doesn't match`)
 	}
 
 	// td_agent_virtual_memory_usage
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_fluentd"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="from_fluentd"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="from_fluentd"} doesn't match`)
 	}
 
@@ -331,17 +331,17 @@ func TestE2EWithProcessFileNameTDAgent(t *testing.T) {
 	log.Info(metrics)
 
 	// td_agent_cpu_time
-	if !regexp.MustCompile(`td_agent_cpu_time\{id="from_td_agent"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_cpu_time{id="from_td_agent"} `).MatchString(metrics) {
 		t.Error(`td_agent_cpu_time{id="from_td_agent"} doesn't match`)
 	}
 
 	// td_agent_resident_memory_usage
-	if !regexp.MustCompile(`td_agent_resident_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_resident_memory_usage{id="from_td_agent"} `).MatchString(metrics) {
 		t.Error(`td_agent_resident_memory_usage{id="from_td_agent"} doesn't match`)
 	}
 
 	// td_agent_virtual_memory_usage
-	if !regexp.MustCompile(`td_agent_virtual_memory_usage\{id="from_td_agent"\} `).MatchString(metrics) {
+	if !regexp.MustCompile(`td_agent_virtual_memory_usage{id="from_td_agent"} `).MatchString(metrics) {
 		t.Error(`td_agent_virtual_memory_usage{id="from_td_agent"} doesn't match`)
 	}
 
@@ -356,18 +356,18 @@ func get(url string) (string, error) {
 
 	response, err := http.Get(url)
 	if err != nil {
-		log.Error("http.Get = %v", err)
+		log.Errorf("http.Get = %v", err)
 		return "", err
 	}
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Error("ioutil.ReadAll = %v", err)
+		log.Errorf("ioutil.ReadAll = %v", err)
 		return "", err
 	}
 	if response.StatusCode != 200 {
-		log.Error("response.StatusCode = %v", response.StatusCode)
+		log.Errorf("response.StatusCode = %v", response.StatusCode)
 		return "", err
 	}
 
