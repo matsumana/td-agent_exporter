@@ -51,7 +51,7 @@ e2etest_setup:
 	curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent4.sh | sh
 	cp /go/src/github.com/matsumana/td-agent_exporter/_test/*.conf /etc/td-agent
 	mkdir ${PID_DIR}
-	/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon ${PID_DIR}/td-agent.pid
+	env FLUENT_CONF=/etc/td-agent/td-agent.conf /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon ${PID_DIR}/td-agent.pid
 	/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon ${PID_DIR}/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf
 	/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon ${PID_DIR}/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf
 	/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon ${PID_DIR}/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf
