@@ -52,14 +52,14 @@ func TestUnitFilterWithoutProcessNamePrefix(t *testing.T) {
 	lines := []string{
 		"UID        PID  PPID  C STIME TTY          TIME CMD",
 		"vagrant   1342  1338  0 04:03 pts/0    00:00:03 /home/vagrant/local/ruby-2.3/bin/ruby -Eascii-8bit:ascii-8bit /home/vagrant/local/ruby-2.3/bin/fluentd -c ./fluent/fluent.conf -vv --under-supervisor",
-		"td-agent  2596     1  0 07:08 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
-		"td-agent  2599  2596  0 07:08 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
-		"root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
-		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
-		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
-		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"td-agent  2596     1  0 07:08 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
+		"td-agent  2599  2596  0 07:08 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
+		"root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
+		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
+		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
+		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
+		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
 		"root      2489     1  0 07:07 ?        00:00:00 supervisor:foo_a",
 		"root      2492  2489  0 07:07 ?        00:00:00 worker:foo_a",
 		"root      2502     1  0 07:07 ?        00:00:00 supervisor:foo_b",
@@ -82,14 +82,14 @@ func TestUnitFilterWithProcessNamePrefix(t *testing.T) {
 	lines := []string{
 		"UID        PID  PPID  C STIME TTY          TIME CMD",
 		"vagrant   1342  1338  0 04:03 pts/0    00:00:03 /home/vagrant/local/ruby-2.3/bin/ruby -Eascii-8bit:ascii-8bit /home/vagrant/local/ruby-2.3/bin/fluentd -c ./fluent/fluent.conf -vv --under-supervisor",
-		"td-agent  2596     1  0 07:08 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
-		"td-agent  2599  2596  0 07:08 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
-		"root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
-		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
-		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
-		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"td-agent  2596     1  0 07:08 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
+		"td-agent  2599  2596  0 07:08 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
+		"root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
+		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
+		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
+		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
+		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
 		"root      2489     1  0 07:07 ?        00:00:00 supervisor:foo_a",
 		"root      2492  2489  0 07:07 ?        00:00:00 worker:foo_a",
 		"root      2502     1  0 07:07 ?        00:00:00 supervisor:foo_b",
@@ -110,14 +110,14 @@ func TestUnitFilterWithProcessNamePrefix(t *testing.T) {
 
 func TestUnitResolveLabelWithConfigFileName(t *testing.T) {
 	lines := []string{
-		"td-agent  2596     1  0 07:08 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
-		"td-agent  2599  2596  0 07:08 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
-		"root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
-		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
-		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
-		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
-		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"td-agent  2596     1  0 07:08 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
+		"td-agent  2599  2596  0 07:08 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid",
+		"root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
+		"root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf",
+		"root      2463     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
+		"root      2466  2463  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_2.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf",
+		"root      2476     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
+		"root      2479  2476  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --config /etc/td-agent/td-agent_3.conf --log /var/log/td-agent/td-agent_3.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid",
 	}
 
 	processName := ""
@@ -132,22 +132,22 @@ func TestUnitResolveLabelWithConfigFileName(t *testing.T) {
 	}
 
 	if value, ok := labels["default"]; !ok &&
-		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid" {
+		value == "/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid" {
 		t.Error("labels `default` doesn't exist")
 	}
 
 	if value, ok := labels["td-agent_1"]; !ok &&
-		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf" {
+		value == "/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_1.pid --config /etc/td-agent/td-agent_1.conf" {
 		t.Error("labels `td-agent_1` doesn't exist")
 	}
 
 	if value, ok := labels["td-agent_2"]; !ok &&
-		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf" {
+		value == "/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_2.pid --config /etc/td-agent/td-agent_2.conf" {
 		t.Error("labels `td-agent_2` doesn't exist")
 	}
 
 	if value, ok := labels["td-agent_3"]; !ok &&
-		value == "/opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf" {
+		value == "/opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent_1.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent_3.pid --config /etc/td-agent/td-agent_3.conf" {
 		t.Error("labels `td-agent_3` doesn't exist")
 	}
 }
@@ -242,7 +242,7 @@ func TestE2EWithoutProcessNamePrefix(t *testing.T) {
 		t.Error("Process from /opt/td-agent/embedded/bin/fluentd shouldn't match")
 	}
 	if regexp.MustCompile(`td_agent_cpu_time\{id="from_td-agent"\} `).MatchString(metrics) {
-		t.Error("Process from /usr/sbin/td-agent shouldn't match")
+		t.Error("Process from /opt/td-agent/bin/fluentd shouldn't match")
 	}
 }
 
@@ -356,18 +356,18 @@ func get(url string) (string, error) {
 
 	response, err := http.Get(url)
 	if err != nil {
-		log.Error("http.Get = %v", err)
+		log.Errorf("http.Get = %v", err)
 		return "", err
 	}
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Error("ioutil.ReadAll = %v", err)
+		log.Errorf("ioutil.ReadAll = %v", err)
 		return "", err
 	}
 	if response.StatusCode != 200 {
-		log.Error("response.StatusCode = %v", response.StatusCode)
+		log.Errorf("response.StatusCode = %v", response.StatusCode)
 		return "", err
 	}
 
