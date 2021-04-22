@@ -104,8 +104,8 @@ example setting of td-agent __without__ process_name
 
   ```
   UID        PID  PPID  C STIME TTY          TIME CMD
-  root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid --config /etc/td-agent/td-agent.conf
-  root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/embedded/bin/ruby /usr/sbin/td-agent --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid --config /etc/td-agent/td-agent.conf
+  root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid --config /etc/td-agent/td-agent.conf
+  root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid --config /etc/td-agent/td-agent.conf
   ```
 
 - Exported metrics example
