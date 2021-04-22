@@ -47,11 +47,6 @@ e2etest:
 
 .PHONY : e2etest_setup
 e2etest_setup:
-	# Go
-	yum install -y git gcc
-	curl -L https://storage.googleapis.com/golang/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz > /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz
-	tar xvf /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz -C /usr/local
-
 	# td-agent
 	yum install -y sudo
 	curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent4.sh | sh
@@ -87,14 +82,19 @@ e2etest_setup:
 	/opt/td-agent/bin/fluentd --use-v1-config --config /etc/td-agent/td-agent_from_fluent.conf --no-supervisor &
 	/usr/sbin/td-agent --config /etc/td-agent/td-agent_from_td_agent.conf --no-supervisor &
 
-	# Wait for td-agent_exporter to start up
-	sleep 3
-
 	# td-agent_exporter
 	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter &
 	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=19256 -fluentd.process_name_prefix=foo &
 	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=29256 -fluentd.process_name_prefix=from -fluentd.process_file_name=fluentd &
 	/go/src/github.com/matsumana/td-agent_exporter/out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=39256 -fluentd.process_name_prefix=from -fluentd.process_file_name=td-agent &
+
+	# Wait for td-agent_exporter to start up
+	sleep 3
+
+	# Go
+	yum install -y git gcc
+	curl -L https://storage.googleapis.com/golang/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz > /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz
+	tar xvf /tmp/go${BUILD_GOLANG_VERSION}.linux-amd64.tar.gz -C /usr/local
 
 check-github-token:
 	if [ ! -f "./github_token" ]; then echo 'file github_token is required'; exit 1 ; fi
