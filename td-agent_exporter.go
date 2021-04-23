@@ -24,6 +24,7 @@ var (
 	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
 
 	processNameRegex       = regexp.MustCompile(`\s/opt/td-agent/bin/fluentd\s*`)
+	processNameRegexWorker = regexp.MustCompile(`\s--under-supervisor\s*`)
 	tdAgentPathRegex       = regexp.MustCompile("\\s" + strings.Replace(tdAgentLaunchCommand, " ", "\\s", -1) + "(.+)?\\s*")
 	configFileNameRegex    = regexp.MustCompile(`\s(-c|--config)\s.*/(.+)\.conf\s*`)
 	processNamePrefixRegex = regexp.MustCompile(`\sworker:(.+)?\s*`)
@@ -177,7 +178,8 @@ func (e *Exporter) filter(lines []string) []string {
 		log.Debugf("line = %s", line)
 
 		if *processNamePrefix == "" {
-			if processNameRegex.MatchString(line) {
+			// append only a worker process
+			if processNameRegex.MatchString(line) && processNameRegexWorker.MatchString(line) {
 				filtered = append(filtered, line)
 			}
 		} else {
