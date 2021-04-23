@@ -77,7 +77,7 @@ func TestUnitFilterWithoutProcessNamePrefix(t *testing.T) {
 	filtered := exporter.filter(lines)
 	log.Info(filtered)
 
-	if len(filtered) != 8 {
+	if len(filtered) != 4 {
 		t.Error("filtered array len doesn't match")
 	}
 }
