@@ -73,14 +73,14 @@ example setting of td-agent and its process name.
 
   ```
   # HELP td_agent_cpu_time td-agent cpu time
-  # TYPE td_agent_cpu_time counter
-  td_agent_cpu_time{id="foo_1"} 0.06
+  # TYPE td_agent_cpu_time gauge
+  td_agent_cpu_time{id="foo_1"} 0.94
   # HELP td_agent_resident_memory_usage td-agent resident memory usage
   # TYPE td_agent_resident_memory_usage gauge
-  td_agent_resident_memory_usage{id="foo_1"} 2.8913664e+07
+  td_agent_resident_memory_usage{id="foo_1"} 4.1304064e+07
   # HELP td_agent_virtual_memory_usage td-agent virtual memory usage
   # TYPE td_agent_virtual_memory_usage gauge
-  td_agent_virtual_memory_usage{id="foo_1"} 1.9724288e+08
+  td_agent_virtual_memory_usage{id="foo_1"} 2.82308608e+08
   # HELP td_agent_up the td-agent processes
   # TYPE td_agent_up gauge
   td_agent_up 1
@@ -118,14 +118,14 @@ example setting of td-agent __without__ process_name
 
   ```
   # HELP td_agent_cpu_time td-agent cpu time
-  # TYPE td_agent_cpu_time counter
-  td_agent_cpu_time{id="default"} 0.06
+  # TYPE td_agent_cpu_time gauge
+  td_agent_cpu_time{id="default"} 0
   # HELP td_agent_resident_memory_usage td-agent resident memory usage
   # TYPE td_agent_resident_memory_usage gauge
-  td_agent_resident_memory_usage{id="default"} 2.895872e+07
+  td_agent_resident_memory_usage{id="default"} 1.0993664e+07
   # HELP td_agent_virtual_memory_usage td-agent virtual memory usage
   # TYPE td_agent_virtual_memory_usage gauge
-  td_agent_virtual_memory_usage{id="default"} 1.97251072e+08
+  td_agent_virtual_memory_usage{id="default"} 7.69163264e+08
   # HELP td_agent_up the td-agent processes
   # TYPE td_agent_up gauge
   td_agent_up 1
@@ -134,11 +134,17 @@ example setting of td-agent __without__ process_name
 # How to build
 
 ```
-$ make
+$ make build-all 
 ```
 
-# How to run unit test
+# How to run unit tests
 
 ```
 $ make unittest
+```
+
+# How to run e2e tests
+
+```
+$ make e2etest-with-docker
 ```
