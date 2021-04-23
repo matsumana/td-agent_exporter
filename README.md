@@ -4,6 +4,10 @@
 
 [td-agent](https://docs.treasuredata.com/articles/td-agent) exporter for [Prometheus](https://prometheus.io/)
 
+# supported td-agent versions
+
+td-agent4
+
 # exported metrics
 
 - td_agent_cpu_time
@@ -49,9 +53,10 @@ example setting of td-agent and its process name.
 - td-agent processes
 
   ```
+  $ ps -ef | egrep '(^UID|td-agen[t])'
   UID        PID  PPID  C STIME TTY          TIME CMD
-  root      2489     1  0 07:07 ?        00:00:00 supervisor:foo_1
-  root      2492  2489  0 07:07 ?        00:00:00 worker:foo_1
+  td-agent  1918     1  0 15:30 ?        00:00:00 supervisor:foo_1
+  td-agent  1921  1918 16 15:30 ?        00:00:00 worker:foo_1
   ```
 
 - Option for td-agent_exporter
@@ -103,9 +108,10 @@ example setting of td-agent __without__ process_name
 - td-agent processes
 
   ```
+  $ ps -ef | egrep '(^UID|td-agen[t])'
   UID        PID  PPID  C STIME TTY          TIME CMD
-  root      2450     1  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid --config /etc/td-agent/td-agent.conf
-  root      2453  2450  0 07:07 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --use-v1-config --group td-agent --daemon /var/run/td-agent/td-agent.pid --config /etc/td-agent/td-agent.conf
+  td-agent   872     1  0 14:22 ?        00:00:00 /opt/td-agent/bin/ruby /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --daemon /var/run/td-agent/td-agent.pid
+  td-agent   875   872  0 14:22 ?        00:00:02 /opt/td-agent/bin/ruby -Eascii-8bit:ascii-8bit /opt/td-agent/bin/fluentd --log /var/log/td-agent/td-agent.log --daemon /var/run/td-agent/td-agent.pid --under-supervisor
   ```
 
 - Exported metrics example
