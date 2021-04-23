@@ -22,6 +22,7 @@ var (
 	metricsPath       = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 	processFileName   = flag.String("fluentd.process_file_name", "ruby", "fluentd's process file name.")
 	processNamePrefix = flag.String("fluentd.process_name_prefix", "", "fluentd's process_name prefix.")
+	logLevel          = flag.String("log.level", "info", "Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]")
 
 	processNameRegex       = regexp.MustCompile(`\s/opt/td-agent/bin/fluentd\s*`)
 	processNameRegexWorker = regexp.MustCompile(`\s--under-supervisor\s*`)
@@ -313,6 +314,11 @@ func (e *Exporter) resolveTargetPid(tdAgentId string, tdAgentCommand string) (in
 
 func main() {
 	flag.Parse()
+
+	err := log.Base().SetLevel(*logLevel)
+	if err != nil {
+		panic(err)
+	}
 
 	exporter := NewExporter()
 	prometheus.MustRegister(exporter)
