@@ -61,10 +61,10 @@ e2etest_setup_td-agent:
 
 .PHONY: e2etest_setup_td-agent_exporter
 e2etest_setup_td-agent_exporter:
-	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter &
-	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=19256 -fluentd.process_name_prefix=foo &
-	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=29256 -fluentd.process_name_prefix=from -fluentd.process_file_name=fluentd &
-	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=39256 -fluentd.process_name_prefix=from -fluentd.process_file_name=td-agent &
+	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter -log.level=debug &
+	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=19256 -fluentd.process_name_prefix=foo -log.level=debug &
+	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=29256 -fluentd.process_name_prefix=from -fluentd.process_file_name=fluentd -log.level=debug &
+	./out/td-agent_exporter-*.linux-amd64/td-agent_exporter -web.listen-address=39256 -fluentd.process_name_prefix=from -fluentd.process_file_name=td-agent -log.level=debug &
 	# Wait for td-agent_exporter to start up
 	sleep 3
 
