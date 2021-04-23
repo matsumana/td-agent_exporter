@@ -1,6 +1,6 @@
 # td-agent_exporter
 
-[![CircleCI](https://circleci.com/gh/matsumana/td-agent_exporter/tree/master.svg?style=shield)](https://circleci.com/gh/matsumana/td-agent_exporter/tree/master)
+[![CircleCI](https://circleci.com/gh/matsumana/td-agent_exporter/tree/main.svg?style=shield)](https://app.circleci.com/pipelines/github/matsumana/td-agent_exporter?branch=main)
 
 [td-agent](https://docs.treasuredata.com/articles/td-agent) exporter for [Prometheus](https://prometheus.io/)
 
