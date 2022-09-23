@@ -1,7 +1,7 @@
 VERSION=$(patsubst "%",%,$(lastword $(shell grep "version\s*=\s" version.go)))
 OUT_DIR=out
 WORK_DIR=/go/src/github.com/matsumana/td-agent_exporter
-BUILD_GOLANG_VERSION=1.16.3
+BUILD_GOLANG_VERSION=1.19.1
 CENTOS_VERSION=7
 GITHUB_USERNAME=matsumana
 PID_DIR=/var/run/td-agent

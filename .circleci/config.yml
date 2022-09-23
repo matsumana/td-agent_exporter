@@ -7,15 +7,15 @@ jobs:
       - image: centos:7
     environment:
       - PATH: /usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - BUILD_GOLANG_VERSION: 1.16.3
+      - BUILD_GOLANG_VERSION: 1.19.1
     steps:
+      - run:
+          name: Install Dependencies
+          command: yum install -y git make
       - checkout
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
-      - run:
-          name: Install Dependencies
-          command: yum install -y make
       - run:
           name: Setup Go
           command: make setup_go_linux
