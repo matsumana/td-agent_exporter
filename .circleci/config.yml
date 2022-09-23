@@ -7,7 +7,7 @@ jobs:
       - image: centos:7
     environment:
       - PATH: /usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - BUILD_GOLANG_VERSION: 1.16.3
+      - BUILD_GOLANG_VERSION: 1.19.1
     steps:
       - checkout
       - restore_cache:
