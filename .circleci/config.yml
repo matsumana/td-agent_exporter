@@ -9,6 +9,7 @@ jobs:
       - PATH: /usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       - BUILD_GOLANG_VERSION: 1.19.1
     steps:
+      - run: yum install -y git
       - checkout
       - restore_cache:
           keys:
